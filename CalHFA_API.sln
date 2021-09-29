@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalHFA API", "CalHFA API\CalHFA API.csproj", "{F286199D-1BFC-4612-8108-928D4D779B0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalHFA_API", "CalHFA_API\CalHFA_API.csproj", "{F286199D-1BFC-4612-8108-928D4D779B0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
