@@ -14,23 +14,23 @@ namespace CalHFA_API.Controllers
         // ALL OF THESE ARE ASYNC. PUT AWAIT KEYWORD BEFORE LONG CALLS LIKE ACCESSING DATABASE TO INCREASE ASYNCHRONOUS ABILITIES
 
         [HttpGet]
-        public async Task<string> Index()
+        public ActionResult Index()
         {
-            return "This is the index";
+            return Ok("This is the index");
         }
 
         // GET: api/data/*string to put*
         [HttpGet("{str}")]
-        public async Task<string> GetString(string str)
+        public ActionResult GetString(string str)
         {
-            return str;
+            return Ok(str);
         }
 
         // GET: api/data/Details/5
         [HttpGet("details/{id}")]
-        public async Task<int> Details(int id)
+        public ActionResult Details(int id)
         {
-            return id;
+            return Ok(id);
         }
     }
 }
