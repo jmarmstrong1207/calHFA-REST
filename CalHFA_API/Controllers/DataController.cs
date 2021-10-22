@@ -11,8 +11,6 @@ namespace CalHFA_API.Controllers
     [Route("api/[controller]")]
     public class DataController : Controller
     {
-        // ALL OF THESE ARE ASYNC. PUT AWAIT KEYWORD BEFORE LONG CALLS LIKE ACCESSING DATABASE TO INCREASE ASYNCHRONOUS ABILITIES
-
         [HttpGet]
         public ActionResult Index()
         {
