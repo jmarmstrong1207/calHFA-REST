@@ -41,5 +41,10 @@ namespace CalHFA_API.Controllers
             var loans = x.Loans.ToList();
             return Ok(loans);
         }
+        [HttpGet("MyHome/ZIP/MySchool")]
+        public ActionResult zipCode(string zipCodes)
+        {
+            return Ok(zipCodes);
+        }
     }
 }
