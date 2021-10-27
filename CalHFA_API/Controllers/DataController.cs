@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CalHFA_API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,20 @@ namespace CalHFA_API.Controllers
             };
 
             return Ok(l);
+        }
+        // GET FOR COMPLIANCE
+        [HttpGet("Compliance")]
+        private ActionResult Compliance(string compliance)
+        {
+            return Ok(compliance);
+        }
+
+        [HttpGet("test")]
+        public ActionResult test()
+        {
+            var x = new loanschemaContext();
+            var loans = x.Loans.ToList();
+            return Ok(loans);
         }
     }
 }
