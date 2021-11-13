@@ -60,8 +60,6 @@ namespace CalHFA_API.Models
                     .HasMaxLength(45)
                     .HasColumnName("LVRatio");
 
-                entity.Property(e => e.ReservDateTime).HasMaxLength(45);
-
                 entity.HasOne(d => d.LoanType)
                     .WithMany(p => p.Loans)
                     .HasForeignKey(d => d.LoanTypeId)
@@ -117,11 +115,7 @@ namespace CalHFA_API.Models
 
                 entity.Property(e => e.LoanId).HasColumnName("LoanID");
 
-                entity.Property(e => e.LoginDate).HasMaxLength(45);
-
                 entity.Property(e => e.LoginName).HasMaxLength(45);
-
-                entity.Property(e => e.StatusDate).HasMaxLength(45);
 
                 entity.HasOne(d => d.Loan)
                     .WithMany(p => p.Loanstatuses)

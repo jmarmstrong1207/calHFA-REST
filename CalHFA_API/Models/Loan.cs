@@ -23,7 +23,7 @@ namespace CalHFA_API.Models
         public string Balance { get; set; }
         public int? InsCode { get; set; }
         public string InsurerNum { get; set; }
-        public string ReservDateTime { get; set; }
+        public DateTime? ReservDateTime { get; set; }
 
         public virtual LoanType LoanType { get; set; }
         public virtual ICollection<Loanstatus> Loanstatuses { get; set; }
