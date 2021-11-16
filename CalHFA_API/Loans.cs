@@ -11,6 +11,7 @@ namespace CalHFA_API
         public int ComplianceReviewSuspenseCount { get; set; }
 
         public int PurchaseReviewCount { get; set; }
+        public String PurchaseReviewDate { get; set; }
         public int PurchaseReviewSuspenseCount { get; set; }
     }
 }
