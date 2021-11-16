@@ -88,27 +88,5 @@ namespace CalHFA_API.Controllers
 
             return retVal;
         }
-
-        //private MyStruct loansInLine(int statusCode)
-        //{
-        //    MyStruct retVal;
-
-        //    retVal.count = 0;
-        //    retVal.date = " ";
-
-        //    var x = new loanschemaContext();
-        //    var statuses = x.Loanstatuses.ToList();
-
-        //    // Buscar fecha maxima
-        //    foreach (var loansStatuses in statuses)
-        //    {
-        //        if (loansStatuses.StatusCode == statusCode)
-        //        {
-        //            retVal.count++;
-        //            //loansStatuses.StatusDate
-        //        }
-        //    }
-        //    return retVal;
-        //}
     }
 }
