@@ -22,6 +22,7 @@ namespace CalHFA_API.Models
         public virtual DbSet<Loancategory> Loancategories { get; set; }
         public virtual DbSet<Loanstatus> Loanstatuses { get; set; }
         public virtual DbSet<Statuscode> Statuscodes { get; set; }
+        public virtual DbSet<LoansInLine> LoansInLines { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -147,6 +148,15 @@ namespace CalHFA_API.Models
 
                 entity.Property(e => e.NotesAndAssumptions).HasMaxLength(400);
             });
+
+
+
+            modelBuilder.Entity<LoansInLine>(entity =>
+            {
+                entity.HasNoKey();
+
+            });
+
 
             OnModelCreatingPartial(modelBuilder);
         }
