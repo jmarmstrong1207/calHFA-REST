@@ -80,8 +80,5 @@ namespace CalHFA_API.Controllers
             }
             return retVal;
         }
-        [HttpGet("/error")]
-        public IActionResult Throw() =>
-        throw new Exception("An error occured.");
     }
 }

@@ -37,10 +37,6 @@ namespace CalHFA_API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/error");
-            }
 
             app.UseHttpsRedirection();
 
