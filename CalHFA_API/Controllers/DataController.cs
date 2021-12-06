@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace CalHFA_API.Controllers
 {
@@ -26,26 +27,36 @@ namespace CalHFA_API.Controllers
                 PurchaseReviewSuspenseCount = 4,
                 PurchaseReviewSuspenseDate = "",
             };
-            //compliance loans in line, date and count
-            MyStruct myStruct = loansInLine(410);
-            l.ComplianceReviewCount = myStruct.count;
-            l.ComplianceReviewDate = myStruct.date;
+            try
+            {
+                //compliance loans in line, date and count
+                MyStruct myStruct = loansInLine(410);
+                l.ComplianceReviewCount = myStruct.count;
+                l.ComplianceReviewDate = myStruct.date;
 
-            //compliance loans in suspense, date and count
-            myStruct = loansInLine(422);
-            l.ComplianceReviewSuspenseCount = myStruct.count;
-            l.ComplianceReviewSuspenseDate = myStruct.date;
+                //compliance loans in suspense, date and count
+                myStruct = loansInLine(422);
+                l.ComplianceReviewSuspenseCount = myStruct.count;
+                l.ComplianceReviewSuspenseDate = myStruct.date;
 
-            //purchase loans in line, date and count
-            myStruct = loansInLine(510);
-            l.PurchaseReviewCount = myStruct.count;
-            l.PurchaseReviewDate = myStruct.date;
+                //purchase loans in line, date and count
+                myStruct = loansInLine(510);
+                l.PurchaseReviewCount = myStruct.count;
+                l.PurchaseReviewDate = myStruct.date;
 
-            //purchase loans in suspense, date and count
-            myStruct = loansInLine(522);
-            l.PurchaseReviewSuspenseCount = myStruct.count;
-            l.PurchaseReviewSuspenseDate = myStruct.date;
-
+                //purchase loans in suspense, date and count
+                myStruct = loansInLine(522);
+                l.PurchaseReviewSuspenseCount = myStruct.count;
+                l.PurchaseReviewSuspenseDate = myStruct.date;
+            }
+            catch (MySqlException e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "a database exception occured: "+ e);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "a runtime exception occured: " + e);
+            }
             return Ok(l);
         }
         //creates a struct that will be in charge of storing the date for the loans and the count of the loans
@@ -64,19 +75,19 @@ namespace CalHFA_API.Controllers
 
             using (var context = new loanschemaContext())
             {
-                #region FromSqlRaw
-                //query that uses the view created inside the data base
-                var lonsInLine = context.LoansInLines.FromSqlRaw("" +
-                     "select * from LoansInLine " +
-                     "where StatusCode = " + statusCode + " " +
-                     "order by StatusDate desc").ToList();
+                    #region FromSqlRaw
+                    //query that uses the view created inside the data base
+                    var lonsInLine = context.LoansInLines.FromSqlRaw("" +
+                         "select * from LoansInLine " +
+                         "where StatusCode = " + statusCode + " " +
+                         "order by StatusDate desc").ToList();
 
-                if (lonsInLine.Count > 0)
-                {
-                    retVal.count = lonsInLine[0].CountLoans.Value;
-                    retVal.date = lonsInLine[0].StatusDate.ToString();
-                }
-                #endregion
+                    if (lonsInLine.Count > 0)
+                    {
+                        retVal.count = lonsInLine[0].CountLoans.Value;
+                        retVal.date = lonsInLine[0].StatusDate.ToString();
+                    }
+                    #endregion
             }
             return retVal;
         }
