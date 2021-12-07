@@ -22,6 +22,7 @@ namespace CalHFA_API.Models
         public virtual DbSet<Loancategory> Loancategories { get; set; }
         public virtual DbSet<Loanstatus> Loanstatuses { get; set; }
         public virtual DbSet<Statuscode> Statuscodes { get; set; }
+        public virtual DbSet<LoansInLine> LoansInLines { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -59,8 +60,6 @@ namespace CalHFA_API.Models
                 entity.Property(e => e.Lvratio)
                     .HasMaxLength(45)
                     .HasColumnName("LVRatio");
-
-                entity.Property(e => e.ReservDateTime).HasMaxLength(45);
 
                 entity.HasOne(d => d.LoanType)
                     .WithMany(p => p.Loans)
@@ -117,11 +116,7 @@ namespace CalHFA_API.Models
 
                 entity.Property(e => e.LoanId).HasColumnName("LoanID");
 
-                entity.Property(e => e.LoginDate).HasMaxLength(45);
-
                 entity.Property(e => e.LoginName).HasMaxLength(45);
-
-                entity.Property(e => e.StatusDate).HasMaxLength(45);
 
                 entity.HasOne(d => d.Loan)
                     .WithMany(p => p.Loanstatuses)
@@ -153,6 +148,15 @@ namespace CalHFA_API.Models
 
                 entity.Property(e => e.NotesAndAssumptions).HasMaxLength(400);
             });
+
+
+
+            modelBuilder.Entity<LoansInLine>(entity =>
+            {
+                entity.HasNoKey();
+            
+            });
+
 
             OnModelCreatingPartial(modelBuilder);
         }
