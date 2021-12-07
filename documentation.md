@@ -1,5 +1,4 @@
 # API Documentation
----
 ## Accessing the endpoint
 ### *GET* /api/data/getLoans
 Returns the date and count for:
@@ -18,10 +17,8 @@ Compliance Review, Compliance Review Suspense, Purchase Review and Purchase Revi
 		"purchaseReviewSuspenseDate":"8/31/2021 9:34:50 AM"
 	}
 ```
----
 ## SQL
 *Note:* loanschemaContext.cs will need to be modified with the correct SQL credentials.
 ## Deployment
 1. Build the project
 1. Run the executable CALHFA_API.exe (in /CalHFA_API/bin/Debug/net5.0)
----
