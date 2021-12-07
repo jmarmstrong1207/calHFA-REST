@@ -5,27 +5,31 @@ namespace CalHFA_API
 {
     public static class Caching
     {
-        private static IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+        // Expiration set for two hours
+        private static int ExpirationDurationMinutes = 120;
+        // 0 seconds in UNIX time. Ensures we will be expired when we first start the API
+        private static DateTimeOffset CachedLoansExpirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        private static Loans CachedLoans = new Loans();
 
-        public static void Add(int count, string date)
+        public static void SetCachedLoans(Loans UpdatedLoans)
         {
-            var expiration = new MemoryCacheEntryOptions()
-            {
-                //expiration set for two hours
-                AbsoluteExpiration = DateTime.Now.AddMinutes(120),
-                Priority = CacheItemPriority.High,
-            };
-            _cache.Set(count, date, expiration);
+            CachedLoans = UpdatedLoans;
+            UpdateCachedLoansExpiration();
         }
-        public static int GetCount(int count)
+
+        public static Loans GetCachedLoans()
         {
-            _cache.Get(count);
-            return count;
+            return CachedLoans;
         }
-        public static string GetDate(string date)
+
+        public static void UpdateCachedLoansExpiration()
         {
-            _cache.Get(date);
-            return date;
+            CachedLoansExpirationTime = DateTime.Now.AddMinutes(ExpirationDurationMinutes);
+        }
+
+        public static bool CachedLoansIsExpired()
+        {
+            return DateTime.Now > CachedLoansExpirationTime;
         }
     }
 }

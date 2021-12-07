@@ -16,6 +16,10 @@ namespace CalHFA_API.Controllers
         [HttpGet("getLoans")]
         public ActionResult getLoans()
         {
+            // Return cached loans if they have not expired yet.
+            if (!Caching.CachedLoansIsExpired()) return Ok(Caching.GetCachedLoans());
+
+            // Otherwise, fetch loan info from server and update the cache.
             Loans l = new()
             {
                 ComplianceReviewCount = 1,
@@ -48,22 +52,9 @@ namespace CalHFA_API.Controllers
                 myStruct = loansInLine(522);
                 l.PurchaseReviewSuspenseCount = myStruct.count;
                 l.PurchaseReviewSuspenseDate = myStruct.date;
-                
-                //add to cache
-                Caching.Add(l.ComplianceReviewCount, l.ComplianceReviewDate);
-                Caching.Add(l.ComplianceReviewSuspenseCount, l.ComplianceReviewSuspenseDate);
-                Caching.Add(l.PurchaseReviewCount, l.PurchaseReviewDate);
-                Caching.Add(l.PurchaseReviewSuspenseCount,l.PurchaseReviewSuspenseDate);
 
-                //change values to cached values
-                l.ComplianceReviewCount = Caching.GetCount(l.ComplianceReviewCount);
-                l.ComplianceReviewDate = Caching.GetDate(l.ComplianceReviewDate);
-                l.ComplianceReviewSuspenseCount = Caching.GetCount(l.ComplianceReviewSuspenseCount);
-                l.ComplianceReviewSuspenseDate = Caching.GetDate(l.ComplianceReviewSuspenseDate);
-                l.PurchaseReviewCount = Caching.GetCount(l.PurchaseReviewCount);
-                l.PurchaseReviewDate = Caching.GetDate(l.PurchaseReviewDate);
-                l.PurchaseReviewSuspenseCount = Caching.GetCount(l.PurchaseReviewSuspenseCount);
-                l.PurchaseReviewSuspenseDate = Caching.GetDate(l.PurchaseReviewSuspenseDate);
+                Caching.SetCachedLoans(l);
+                
             }
             catch (MySqlException e)
             {
