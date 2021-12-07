@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace CalHFA_API.Controllers
 {
@@ -26,42 +27,52 @@ namespace CalHFA_API.Controllers
                 PurchaseReviewSuspenseCount = 4,
                 PurchaseReviewSuspenseDate = "",
             };
-            //compliance loans in line, date and count
-            MyStruct myStruct = loansInLine(410);
-            l.ComplianceReviewCount = myStruct.count;
-            l.ComplianceReviewDate = myStruct.date;
+            try
+            {
+                //compliance loans in line, date and count
+                MyStruct myStruct = loansInLine(410);
+                l.ComplianceReviewCount = myStruct.count;
+                l.ComplianceReviewDate = myStruct.date;
 
-            //compliance loans in suspense, date and count
-            myStruct = loansInLine(422);
-            l.ComplianceReviewSuspenseCount = myStruct.count;
-            l.ComplianceReviewSuspenseDate = myStruct.date;
+                //compliance loans in suspense, date and count
+                myStruct = loansInLine(422);
+                l.ComplianceReviewSuspenseCount = myStruct.count;
+                l.ComplianceReviewSuspenseDate = myStruct.date;
 
-            //purchase loans in line, date and count
-            myStruct = loansInLine(510);
-            l.PurchaseReviewCount = myStruct.count;
-            l.PurchaseReviewDate = myStruct.date;
+                //purchase loans in line, date and count
+                myStruct = loansInLine(510);
+                l.PurchaseReviewCount = myStruct.count;
+                l.PurchaseReviewDate = myStruct.date;
 
-            //purchase loans in suspense, date and count
-            myStruct = loansInLine(522);
-            l.PurchaseReviewSuspenseCount = myStruct.count;
-            l.PurchaseReviewSuspenseDate = myStruct.date;
+                //purchase loans in suspense, date and count
+                myStruct = loansInLine(522);
+                l.PurchaseReviewSuspenseCount = myStruct.count;
+                l.PurchaseReviewSuspenseDate = myStruct.date;
+                
+                //add to cache
+                Caching.Add(l.ComplianceReviewCount, l.ComplianceReviewDate);
+                Caching.Add(l.ComplianceReviewSuspenseCount, l.ComplianceReviewSuspenseDate);
+                Caching.Add(l.PurchaseReviewCount, l.PurchaseReviewDate);
+                Caching.Add(l.PurchaseReviewSuspenseCount,l.PurchaseReviewSuspenseDate);
 
-            //add to cache
-            Caching.Add(l.ComplianceReviewCount, l.ComplianceReviewDate);
-            Caching.Add(l.ComplianceReviewSuspenseCount, l.ComplianceReviewSuspenseDate);
-            Caching.Add(l.PurchaseReviewCount, l.PurchaseReviewDate);
-            Caching.Add(l.PurchaseReviewSuspenseCount,l.PurchaseReviewSuspenseDate);
-
-            //change values to cached values
-            l.ComplianceReviewCount = Caching.GetCount(l.ComplianceReviewCount);
-            l.ComplianceReviewDate = Caching.GetDate(l.ComplianceReviewDate);
-            l.ComplianceReviewSuspenseCount = Caching.GetCount(l.ComplianceReviewSuspenseCount);
-            l.ComplianceReviewSuspenseDate = Caching.GetDate(l.ComplianceReviewSuspenseDate);
-            l.PurchaseReviewCount = Caching.GetCount(l.PurchaseReviewCount);
-            l.PurchaseReviewDate = Caching.GetDate(l.PurchaseReviewDate);
-            l.PurchaseReviewSuspenseCount = Caching.GetCount(l.PurchaseReviewSuspenseCount);
-            l.PurchaseReviewSuspenseDate = Caching.GetDate(l.PurchaseReviewSuspenseDate);
-
+                //change values to cached values
+                l.ComplianceReviewCount = Caching.GetCount(l.ComplianceReviewCount);
+                l.ComplianceReviewDate = Caching.GetDate(l.ComplianceReviewDate);
+                l.ComplianceReviewSuspenseCount = Caching.GetCount(l.ComplianceReviewSuspenseCount);
+                l.ComplianceReviewSuspenseDate = Caching.GetDate(l.ComplianceReviewSuspenseDate);
+                l.PurchaseReviewCount = Caching.GetCount(l.PurchaseReviewCount);
+                l.PurchaseReviewDate = Caching.GetDate(l.PurchaseReviewDate);
+                l.PurchaseReviewSuspenseCount = Caching.GetCount(l.PurchaseReviewSuspenseCount);
+                l.PurchaseReviewSuspenseDate = Caching.GetDate(l.PurchaseReviewSuspenseDate);
+            }
+            catch (MySqlException e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "a database exception occured: "+ e);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "a runtime exception occured: " + e);
+            }
             return Ok(l);
         }
         //creates a struct that will be in charge of storing the date for the loans and the count of the loans

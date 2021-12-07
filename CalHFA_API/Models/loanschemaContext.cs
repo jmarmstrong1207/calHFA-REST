@@ -154,7 +154,7 @@ namespace CalHFA_API.Models
             modelBuilder.Entity<LoansInLine>(entity =>
             {
                 entity.HasNoKey();
-            
+
             });
 
 
