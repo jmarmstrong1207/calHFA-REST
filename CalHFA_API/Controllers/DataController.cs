@@ -16,6 +16,10 @@ namespace CalHFA_API.Controllers
         [HttpGet("getLoans")]
         public ActionResult getLoans()
         {
+            // Return cached loans if they have not expired yet.
+            if (!Caching.CachedLoansIsExpired()) return Ok(Caching.GetCachedLoans());
+
+            // Otherwise, fetch loan info from server and update the cache.
             Loans l = new()
             {
                 ComplianceReviewCount = 1,
@@ -48,6 +52,9 @@ namespace CalHFA_API.Controllers
                 myStruct = loansInLine(522);
                 l.PurchaseReviewSuspenseCount = myStruct.count;
                 l.PurchaseReviewSuspenseDate = myStruct.date;
+
+                Caching.SetCachedLoans(l);
+                
             }
             catch (MySqlException e)
             {
@@ -75,19 +82,19 @@ namespace CalHFA_API.Controllers
 
             using (var context = new loanschemaContext())
             {
-                    #region FromSqlRaw
-                    //query that uses the view created inside the data base
-                    var lonsInLine = context.LoansInLines.FromSqlRaw("" +
-                         "select * from LoansInLine " +
-                         "where StatusCode = " + statusCode + " " +
-                         "order by StatusDate desc").ToList();
+                #region FromSqlRaw
+                //query that uses the view created inside the data base
+                var lonsInLine = context.LoansInLines.FromSqlRaw("" +
+                     "select * from LoansInLine " +
+                     "where StatusCode = " + statusCode + " " +
+                     "order by StatusDate desc").ToList();
 
-                    if (lonsInLine.Count > 0)
-                    {
-                        retVal.count = lonsInLine[0].CountLoans.Value;
-                        retVal.date = lonsInLine[0].StatusDate.ToString();
-                    }
-                    #endregion
+                if (lonsInLine.Count > 0)
+                {
+                    retVal.count = lonsInLine[0].CountLoans.Value;
+                    retVal.date = lonsInLine[0].StatusDate.ToString();
+                }
+                #endregion
             }
             return retVal;
         }
