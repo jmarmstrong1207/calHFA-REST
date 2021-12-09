@@ -1,6 +1,6 @@
 # API Documentation
 ## Accessing the endpoint
-### *GET* /api/data/getLoans
+### *GET* https://localhost:5001/api/data/getLoans
 Returns the date and count for:
 Compliance Review, Compliance Review Suspense, Purchase Review and Purchase Review Suspense.
 
