@@ -1,4 +1,4 @@
-# calHFA-static-web-part
+# calHFA-REST
 A consumable API to display loan information analytics for the California Housing Finance Agency.
 
 Currently, [their website](https://www.calhfa.ca.gov/homeownership/index.htm) shows Loan information as shown below, but it needs to be manually updated:
